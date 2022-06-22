@@ -14,9 +14,10 @@ bool colliderCircleRect(TCircle obj1, TRect obj2);
 bool colliderMouseRect(POINT mouse, TRect obj);
 int getRectWidth(TRect obj);
 int getRectHeight(TRect obj);
-TRect Rect(int x, int y, int width, int height);
 void seekEntity(TRect* collider, TEntity *en,int offsetX = 0, int offsetY = 0);
 void syncEntityCollider(TEntity *en, int coffset = 0);
+bool colliderEntityLine(TEntity* en, TLine line, int orientation);
+bool colliderEntityRect(TEntity* en, TRect rect, int orientation);
 
 
 

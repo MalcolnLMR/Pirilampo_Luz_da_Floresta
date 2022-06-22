@@ -15,11 +15,10 @@
 #include "render.h"       // Funções para rederizar objetos na tela
 #include "boxCollider.h"  // Funções para lidar com colisões entre objetos
 #include "input.h"        // Lidar com a entrada de dados do jogador
-//#include "gameloops.h"
 
 //	Bibliotecas de mecânicas do jogo
 #include "inventory.h"    // Criação de itens e inventário
-#include "stages.h"       // Localização de colisões de cada mapa
+#include "gameStages.h"   // Localização de colisões de cada mapa
 
 
 #endif

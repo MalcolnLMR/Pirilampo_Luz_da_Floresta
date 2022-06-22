@@ -46,6 +46,14 @@ void drawEntity(TEntity en, int style){
 	}
 }
 
+void  drawLine(TLine line_){
+	line(line_.x1, line_.y1, line_.x2, line_.y2);
+}
+
+void  drawRect(TRect rect){
+	rectangle(rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);
+}
+
 
 
 

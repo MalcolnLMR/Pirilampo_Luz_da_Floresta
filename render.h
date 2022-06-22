@@ -7,6 +7,8 @@ void* load_image(const char *locale, int width, int height, double scale = 1, in
 void  delete_image(void *image);
 void* print_area(int width, int height, int x = 0, int y = 0);
 void  drawEntity(TEntity en, int style = 0);
+void  drawLine(TLine line_);
+void  drawRect(TRect rect);
 
 
 

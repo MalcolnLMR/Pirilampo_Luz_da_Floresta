@@ -13,6 +13,7 @@ struct TEntity{
 	
 	// Sprite e máscara
 	void *sprite, *mask;
+	int size;
 	
 	// Retângulos de colisão
 	TRect collider;
@@ -26,6 +27,7 @@ struct TEntity{
 };
 
 void destroyEntity(TEntity *en);
+
 
 
 #endif

@@ -1,11 +1,5 @@
 #include"mylibrary.h"
 
-#define NANOSECS 1000000000
-
-/* GAME STATES */ 
-
-
-
 	//Iniciar as variaveis globais
 //Variaveis gráficas
 const int coffset = 8;   // Tamanho da projeção da colisão do jogador
@@ -27,6 +21,10 @@ TEntity dialogueBox1;
 TEntity background_1;
 TRect box, paredeEsq, paredeCima, paredeBaixo, paredeDir;
 TRect goLeft, goRight, goUp, goDown;
+
+	// Definindo os Estágios
+int actualStage = 1;
+TStage stages[6];
 
 int gameloop = MENU;
 	//Inventário
@@ -95,6 +93,13 @@ void setup(){
 	
 	//player.mask = load_image("assets/player_m.bmp", 128, 128, 0.5);
 	
+	// CRIANDO OS ESTÁGIOS
+	stages[0] = setStage(Line(100, 0, 100, ymax),
+	                     Line(xmax - 130, 0, xmax - 130, ymax), 
+						 Line(0, 250, xmax, 250), 
+						 Line(0, ymax, 650, ymax));
+	stages[0].colliders[0] = Rect(420, 200, 60, 400);
+	
 	//Criação de retângulos de colisão
 	paredeEsq = Rect(0, 0, 81, 750);
 	paredeCima = Rect(0, 0, 750, 60);
@@ -112,7 +117,8 @@ void setup(){
 	player.cright = Rect(player.x, player.y, 64 + coffset, 64);
 	player.cleft  = Rect(player.x - coffset, player.y, 64, 64);		
 	player.collider = Rect(player.x, player.y, 64, 64);	
-	player.x = xmax/2; player.y = ymax/2; player.spd = 5;	
+	player.x = xmax/2; player.y = ymax/2; player.spd = 5;
+	player.size = spriteSize;	
 	
 	//Criação de invetário e itens
 	setcolor(RGB(15, 140, 140)); //Colorir sprite temporário do item
@@ -269,6 +275,8 @@ void game_render(){
 	setvisualpage(pg);				
 	cleardevice();
 	
+
+	
 	//Desenhar Background
 	drawEntity(background_1, 1);
 	
@@ -290,7 +298,18 @@ void game_render(){
 	if(magicalOrb.show)   drawEntity(magicalOrb, 1);	
 	if(lowKey.show)       drawEntity(lowKey, 1);
 	
+	/* DEBUG DE COLLIDERS */
+	setlinestyle(0, 0, 3);
+	setcolor(RGB(255,0,0));
+	drawLine(stages[0].upLimit);
+	drawLine(stages[0].leftLimit);
+	drawLine(stages[0].rightLimit);
+	drawLine(stages[0].downLimit);
+	drawRect(stages[0].colliders[0]);
+	/* FIM DO DEBUG DE COLLIDERS */
+	
 	//Atualizar display com tela já finalizada	
+	
 	setactivepage(pg); 		
 }
 
@@ -302,21 +321,22 @@ void game_tick(){
 	syncEntityCollider(&magicalOrb);
 	syncEntityCollider(&lowKey);
 	
-	//Verificar colisões com paredes	
+	//Verificar colisões com paredes
+	runStageCollider(1, &player, stages);	
 	//if(colliderRectRect(player.cright, paredeDir)) player.right = false; 
-	if(colliderRectRect(player.cright, box))  player.right = false; else player.right = true;
+	//if(colliderRectRect(player.cright, box))  player.right = false; else player.right = true;
 	
 	///if(colliderRectRect(player.cleft, paredeEsq)) player.left  = false; 
-	if(colliderRectRect(player.cleft, box))   player.left  = false; else player.left  = true;
+	//if(colliderRectRect(player.cleft, box))   player.left  = false; else player.left  = true;
 	
 	//if(colliderRectRect(player.cup, paredeCima, UP_)) player.up    = false; 
-	if(colliderRectRect(player.cup, box))     player.up    = false; else player.up    = true;
+	//if(colliderRectRect(player.cup, box))     player.up    = false; else player.up    = true;
 	
 	//if(colliderRectRect(player.cdown, paredeBaixo, DOWN_)) player.down  = false; 
-	if(colliderRectRect(player.cdown, box))   player.down  = false; else player.down  = true;
+	//if(colliderRectRect(player.cdown, box))   player.down  = false; else player.down  = true;
 	
 	// Verificar caso o jogadro chegue perto da borda
-	if (player.y < ymax + spriteSize/2) isInChange = true;
+	//if (player.y < ymax + spriteSize/2) isInChange = true;
 	
 	//LIdar com a entrada de dados do jogador
 	player.isMoving = false;

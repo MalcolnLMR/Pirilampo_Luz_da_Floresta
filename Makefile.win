@@ -4,8 +4,8 @@
 CPP      = g++.exe -D__DEBUG__
 CC       = gcc.exe -D__DEBUG__
 WINDRES  = windres.exe
-OBJ      = main.o render.o input.o entity.o boxCollider.o inventory.o stages.o
-LINKOBJ  = main.o render.o input.o entity.o boxCollider.o inventory.o stages.o
+OBJ      = main.o render.o input.o entity.o boxCollider.o inventory.o gameStages.o geometricObj.o
+LINKOBJ  = main.o render.o input.o entity.o boxCollider.o inventory.o gameStages.o geometricObj.o
 LIBS     = -L"F:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib32" -static-libgcc -lbgi -lgdi32 -lcomdlg32 -luuid -loleaut32 -lole32 -m32 -g3
 INCS     = -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include"
 CXXINCS  = -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/include" -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include" -I"F:/Program Files (x86)/Dev-Cpp/MinGW64/lib/gcc/x86_64-w64-mingw32/4.9.2/include/c++"
@@ -42,5 +42,8 @@ boxCollider.o: boxCollider.cpp
 inventory.o: inventory.cpp
 	$(CPP) -c inventory.cpp -o inventory.o $(CXXFLAGS)
 
-stages.o: stages.cpp
-	$(CPP) -c stages.cpp -o stages.o $(CXXFLAGS)
+gameStages.o: gameStages.cpp
+	$(CPP) -c gameStages.cpp -o gameStages.o $(CXXFLAGS)
+
+geometricObj.o: geometricObj.cpp
+	$(CPP) -c geometricObj.cpp -o geometricObj.o $(CXXFLAGS)
