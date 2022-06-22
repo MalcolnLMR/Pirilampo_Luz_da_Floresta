@@ -19,6 +19,7 @@
 
 //	Bibliotecas de mecânicas do jogo
 #include "inventory.h"    // Criação de itens e inventário
+#include "stages.h"       // Localização de colisões de cada mapa
 
 
 #endif

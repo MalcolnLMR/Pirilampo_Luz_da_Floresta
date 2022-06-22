@@ -72,12 +72,6 @@ void syncEntityCollider(TEntity *en, int coffset){
 	seekEntity(&en->cright, en);	
 }
 
-void addCollider(TStage *stg, TRect collider){
-	stg->colliders[stg->size] = collider;
-	stg->size += 1;
-}
-
-
 
 
 

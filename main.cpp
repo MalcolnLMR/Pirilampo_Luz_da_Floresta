@@ -1,21 +1,8 @@
 #include"mylibrary.h"
 
-/*
-	Duvidas:
-		Otimização - 1 bg grande, diversos bg separados que mudam de posição
-
-*/
-
-
-
 #define NANOSECS 1000000000
 
-#define GAME 1
-#define MENU 2
-#define GAMEOVER 3
-#define LOADGAME 4
-#define PAUSE 5
-#define EXIT 6
+/* GAME STATES */ 
 
 
 
@@ -26,7 +13,7 @@ void *bgTest;            // Tela de testes
 bool isInChange = false; // Variavel de controle para travessia entre telas
 int pg = 1;              // Controle do double buffering
 int xmax, ymax;          // Valores máximos da tela
-int spriteSize = 128;    // Tamanho dos sprites
+int spriteSize;          // Tamanho dos sprites
 
 // ENTIDADES DO JOGO
 TEntity player;                             // O Jogador
@@ -40,7 +27,6 @@ TEntity dialogueBox1;
 TEntity background_1;
 TRect box, paredeEsq, paredeCima, paredeBaixo, paredeDir;
 TRect goLeft, goRight, goUp, goDown;
-TStage stage1;
 
 int gameloop = MENU;
 	//Inventário
@@ -99,6 +85,7 @@ void setup(){
 	//bgTest = load_image("assets/map_test2.bmp", 1000, 5000);
 	background_1.sprite = load_image("assets/stage1.5.bmp", 1000, 800, 1);	
 	player.sprite = load_image("assets/vagalume.bmp", 256, 256, 0.5);
+	spriteSize = 128;
 	paje.sprite = load_image("assets/paje.bmp", 1024, 1024);
 	orbe.sprite = load_image("assets/orbe.bmp", 1024, 1024);
 	mora.sprite = load_image("assets/mora.bmp", 1024, 1024);
