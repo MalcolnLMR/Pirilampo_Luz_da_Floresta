@@ -24,7 +24,9 @@ TRect goLeft, goRight, goUp, goDown;
 
 	// Definindo os Estágios
 int actualStage = 1;
+int lastStage;
 TStage stages[6];
+int moveStageKey = 0;
 
 int gameloop = MENU;
 	//Inventário
@@ -67,6 +69,7 @@ void exit_tick();
 void setup(){
 	//Definir variaveis e criar tela
 	initwindow(1000, 800, "Guardioes da Floresta");
+	window = GetForegroundWindow();
 	xmax = getmaxx();
 	ymax = getmaxy();
 	setvisualpage(pg);	
@@ -94,11 +97,16 @@ void setup(){
 	//player.mask = load_image("assets/player_m.bmp", 128, 128, 0.5);
 	
 	// CRIANDO OS ESTÁGIOS
-	stages[0] = setStage(Line(100, 0, 100, ymax),
-	                     Line(xmax - 130, 0, xmax - 130, ymax), 
-						 Line(0, 250, xmax, 250), 
-						 Line(0, ymax, 650, ymax));
+	stages[0] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 250, xmax, 250),               //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
 	stages[0].colliders[0] = Rect(420, 200, 60, 400);
+	stages[1] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 0, 650, 0),                    //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
+	stages[1].colliders[0] = Rect(420, 200, 60, 400);
 	
 	//Criação de retângulos de colisão
 	paredeEsq = Rect(0, 0, 81, 750);
@@ -202,16 +210,22 @@ void setup(){
 	background_1.x = 0;
 	background_1.y = 0;
 	
+	cleardevice();
+	
 }
 
 
 
 void menu_tick(){
 	// JOGAR - SAIR
+	//window = SetActiveWindow(window);
 	GetCursorPos(&mouse);
 	ScreenToClient(window, &mouse);
-	if (GetKeyState(VK_LBUTTON)&0x80) {		
-		//Selecionar itens
+	//ClientToScreen(window, &mouse);
+	if (GetKeyState(VK_LBUTTON)&0x80) {	
+//		printf("(%d, %d) - ", mouse.x, mouse.y);
+//		printf("(%d, %d)\n", btnPlay.collider.x, btnPlay.collider.y);
+		window = GetForegroundWindow();
 		if (colliderMouseRect(mouse, btnPlay.collider)) gameloop = GAME;
 		if (colliderMouseRect(mouse, btnExit.collider)) gameloop = EXIT;
 	}
@@ -297,18 +311,18 @@ void game_render(){
 	if(glassShard.show)   drawEntity(glassShard, 1);	
 	if(magicalOrb.show)   drawEntity(magicalOrb, 1);	
 	if(lowKey.show)       drawEntity(lowKey, 1);
+	//Atualizar display com tela já finalizada
+	
 	
 	/* DEBUG DE COLLIDERS */
 	setlinestyle(0, 0, 3);
 	setcolor(RGB(255,0,0));
-	drawLine(stages[0].upLimit);
-	drawLine(stages[0].leftLimit);
-	drawLine(stages[0].rightLimit);
-	drawLine(stages[0].downLimit);
-	drawRect(stages[0].colliders[0]);
-	/* FIM DO DEBUG DE COLLIDERS */
-	
-	//Atualizar display com tela já finalizada	
+	drawLine(stages[actualStage-1].upLimit);
+	drawLine(stages[actualStage-1].leftLimit);
+	drawLine(stages[actualStage-1].rightLimit);
+	drawLine(stages[actualStage-1].downLimit);
+	drawRect(stages[actualStage-1].colliders[0]);
+	/* FIM DO DEBUG DE COLLIDERS */	
 	
 	setactivepage(pg); 		
 }
@@ -321,8 +335,71 @@ void game_tick(){
 	syncEntityCollider(&magicalOrb);
 	syncEntityCollider(&lowKey);
 	
-	//Verificar colisões com paredes
-	runStageCollider(1, &player, stages);	
+	
+	
+	
+	// Verificar se está em troca de estágio
+	if(isInChange){
+		if (lastStage < actualStage){
+			if(moveStageKey <= -ymax){
+				isInChange = false;
+				moveStageKey = 0;
+			} else {
+				moveStageKey -= 5;
+			}
+			/* MOVIMENTAR OBJETOS PARA CIMA */
+			moveStage(&stages[actualStage-1], -5);
+			player.y += -5;
+		} else {
+			if(moveStageKey >= ymax){
+				isInChange = false;
+				moveStageKey = 0;
+			} else {
+				moveStageKey += 5;
+			}
+			/* MOVIMENTAR OBJETOS PARA BAIXO */
+			moveStage(&stages[actualStage-1], 5);
+			player.y += 5;			
+		}
+		
+	} else{	
+		// Verificar caso o jogador tente passar de cenário
+		if(player.y + player.spd + player.size/2 >= ymax && !isInChange){
+			isInChange = true;
+			lastStage = actualStage;
+			moveStageKey = 0;
+			actualStage += 1;
+		} else if(player.y - player.spd <= -player.size && !isInChange){
+			isInChange = true;
+			lastStage = actualStage;
+			moveStageKey = 0;
+			actualStage -= 1;
+		}
+		
+		// Verificar colisões com objetos do estágio	
+		runStageCollider(actualStage, &player, stages);
+		
+		//LIdar com a entrada de dados do jogador
+		player.isMoving = false;
+		if(GetKeyState(VK_W)&0x80 && player.up){
+			player.y -= player.spd;
+			player.isMoving = true;		
+		}
+		if(GetKeyState(VK_S)&0x80 && player.down){
+			player.y += player.spd;
+			player.isMoving = true;	
+		}
+		if(GetKeyState(VK_A)&0x80 && player.left){
+			player.x -= player.spd;
+			player.isMoving = true;	
+		}
+		if(GetKeyState(VK_D)&0x80 && player.right){
+			player.x += player.spd;
+			player.isMoving = true;	
+		}	
+	}
+	
+	
 	//if(colliderRectRect(player.cright, paredeDir)) player.right = false; 
 	//if(colliderRectRect(player.cright, box))  player.right = false; else player.right = true;
 	
@@ -335,27 +412,10 @@ void game_tick(){
 	//if(colliderRectRect(player.cdown, paredeBaixo, DOWN_)) player.down  = false; 
 	//if(colliderRectRect(player.cdown, box))   player.down  = false; else player.down  = true;
 	
-	// Verificar caso o jogadro chegue perto da borda
+	// Verificar caso o jogador chegue perto da borda
 	//if (player.y < ymax + spriteSize/2) isInChange = true;
 	
-	//LIdar com a entrada de dados do jogador
-	player.isMoving = false;
-	if(GetKeyState(VK_W)&0x80 && player.up){
-		player.y -= player.spd;
-		player.isMoving = true;		
-	}
-	if(GetKeyState(VK_S)&0x80 && player.down){
-		player.y += player.spd;
-		player.isMoving = true;	
-	}
-	if(GetKeyState(VK_A)&0x80 && player.left){
-		player.x -= player.spd;
-		player.isMoving = true;	
-	}
-	if(GetKeyState(VK_D)&0x80 && player.right){
-		player.x += player.spd;
-		player.isMoving = true;	
-	}
+	
 	
 	//Adicionar item ao inventário
 	if (glassShard.show && colliderRectRect(player.collider, glassShard.collider)) {

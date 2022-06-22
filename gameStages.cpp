@@ -6,8 +6,7 @@ void runStageCollider(int stage, TEntity* player, TStage stages[]){
 		case 1:
 			// Colisões da ESQUERDA
 			
-			if(colliderEntityLine(player, stages[0].leftLimit, 1)) player->left	= false; // Parede
-						
+			if(colliderEntityLine(player, stages[0].leftLimit, 1)) player->left	= false; // Parede						
 			else if(colliderEntityRect(player, stages[0].colliders[0], 1)) player->left = false;	
 						
 			else player->left = true;
@@ -50,8 +49,20 @@ void runStageCollider(int stage, TEntity* player, TStage stages[]){
 	}
 }
 
-void changeStage(int endStage){
-	
+void moveStage(TStage *stage, int dy){
+	for(int i = 0; i < 6; i++){
+		if(stage->colliders[i].y != -1){
+			stage->colliders[i].y += dy;
+		}
+	}/*
+	stage->leftLimit.y1 += dy;
+	stage->leftLimit.y2 += dy;
+	stage->rightLimit.y1 += dy;
+	stage->rightLimit.y2 += dy;
+	stage->upLimit.y1 += dy;
+	stage->upLimit.y2 += dy;
+	stage->downLimit.y1 += dy;	
+	stage->downLimit.y2 += dy;*/	
 }
 
 TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimit){
@@ -60,6 +71,10 @@ TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimi
 	temp.rightLimit = rightLimit;
 	temp.upLimit = upLimit;
 	temp.downLimit = downLimit;
-	printf("%d", temp.downLimit);
+	for(int i = 0; i < 6; i++){
+		temp.colliders[i].x = -1;
+		temp.colliders[i].y = -1;
+	}
+	temp.active = false;
 	return temp;
 }

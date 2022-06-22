@@ -15,6 +15,7 @@ struct TStage{
 	TLine upLimit;
 	TLine downLimit;
 	TRect colliders[5];
+	bool active;
 };
 
 struct TPlataform{
@@ -26,6 +27,7 @@ struct TPlataform{
 void runStageCollider(int stage, TEntity* player, TStage stages[6]);
 void changeStage(int endStage);
 TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimit);
+void moveStage(TStage *stage, int dy);
 
 
 
