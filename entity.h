@@ -12,7 +12,7 @@ struct TEntity{
 	int hp, spd;                 // Vida e Velocidade de movimento
 	
 	// Sprite e máscara
-	void *sprite, *mask;
+	unsigned char *sprite, *mask;
 	int size;
 	
 	// Retângulos de colisão

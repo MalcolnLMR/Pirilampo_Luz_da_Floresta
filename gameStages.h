@@ -19,7 +19,7 @@ struct TStage{
 	TRect colliders[5];
 	/* BACKGROUND */ 
 	int bgx, bgy; // Coordenadas do Background
-	void *background;
+	unsigned char *background;
 	bool active;
 };
 

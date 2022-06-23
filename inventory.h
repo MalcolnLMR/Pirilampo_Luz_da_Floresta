@@ -16,7 +16,7 @@ struct TItem{
 	TRect rect;
 	const char *name;
 	int *combinations;	
-	void *sprite, *mask, *spriteselected, *maskselected;
+	unsigned char *sprite, *mask, *spriteselected, *maskselected;
 	bool selected;
 	bool show;
 };

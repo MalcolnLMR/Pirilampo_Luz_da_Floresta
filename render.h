@@ -7,7 +7,7 @@
 #define BTN_EXIT 1
 
 struct TBackground{
-	void* image;
+	unsigned char *image;
 	int x, y;
 };
 
@@ -16,9 +16,10 @@ struct TUi{
 	TEntity btn[2];
 };
 
-void* load_image(const char *locale, int width, int height, double scale = 1, int ini_width = 0, int ini_heigth = 0);
+unsigned char* load_image(const char *locale, int width, int height, double scale = 1, int ini_width = 0, int ini_heigth = 0);
+unsigned char* do_mask(unsigned char* image, int size);
 void  delete_image(void *image);
-void* print_area(int width, int height, int x = 0, int y = 0);
+unsigned char* print_area(int width, int height, int x = 0, int y = 0);
 void  drawEntity(TEntity en, int style = 0);
 void  drawLine(TLine line_);
 void  drawRect(TRect rect);

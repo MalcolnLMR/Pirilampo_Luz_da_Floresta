@@ -87,6 +87,9 @@ void setup(){
 	//bgTest = load_image("assets/map_test2.bmp", 1000, 5000);
 	menu.bg.image = load_image("assets/menu.bmp", 1000, 800);
 	player.sprite = load_image("assets/vagalume.bmp", 256, 256, 0.5);
+	player.size = 128;
+	player.mask = do_mask(player.sprite, player.size);
+	
 	spriteSize = 128;
 	paje.sprite = load_image("assets/paje.bmp", 1024, 1024);
 	orbe.sprite = load_image("assets/orbe.bmp", 1024, 1024);
@@ -114,7 +117,7 @@ void setup(){
 						 Line(0, ymax, 650, ymax));             //DownLimit
 	stages[1].colliders[0] = Rect(420, 200, 60, 400);
 	stages[1].background = load_image("assets/stage1.4.bmp", 1000, 800, 1);
-	stages[1].bgy = ymax;
+	stages[1].bgy = ymax + 1;
 	/* TERCEIRO ESTÁGIO */
 	stages[2] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
@@ -337,7 +340,7 @@ void game_render(){
 	drawStage(stages[5]);
 	
 	//Desenhar player	
-	drawEntity(player, 1);
+	drawEntity(player, 0);
 	
 	//Desenhar itens no inventário
 	for(i = 0; i <= inventory.lenght; i++){

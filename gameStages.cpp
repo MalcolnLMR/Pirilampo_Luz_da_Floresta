@@ -13,20 +13,19 @@ void runStageCollider(int stage, TEntity* player, TStage stages[]){
 			
 			// Colisões da DIREITA
 			
-			if(colliderEntityLine(player, stages[0].rightLimit, 2)) player->right = false;	
-			
-			else if(colliderEntityRect(player, stages[0].colliders[0], 2)) player->right = false;			
+			if(colliderEntityLine(player, stages[0].rightLimit, 2)) player->right = false;				
+			else if(colliderEntityRect(player, stages[0].colliders[0], 2)) player->right = false;
+						
 			else player->right = true;
 			
 			// Colisões de CIMA
-			if(colliderEntityLine(player, stages[0].upLimit, 3)) player->up	= false;
-				
-			else if(colliderEntityRect(player, stages[0].colliders[0], 3)) player->up = false;			
+			if(colliderEntityLine(player, stages[0].upLimit, 3)) player->up	= false;				
+			else if(colliderEntityRect(player, stages[0].colliders[0], 3)) player->up = false;
+						
 			else player->up = true;
 			
 			// Colisões de BAIXO
-			if(colliderEntityLine(player, stages[0].downLimit, 4)) player->down	= false;
-				
+			if(colliderEntityLine(player, stages[0].downLimit, 4)) player->down	= false;				
 			//else if(colliderRectRect(player->collider, stages[0].colliders[0], 4)) player->down = false;	
 					
 			else player->down = true;
