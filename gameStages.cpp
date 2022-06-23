@@ -49,12 +49,25 @@ void runStageCollider(int stage, TEntity* player, TStage stages[]){
 	}
 }
 
-void moveStage(TStage *stage, int dy){
+void moveStage(TStage *stage, int actualStage, int dy){
+	/*
+		dir: 0 // Para baixo
+		dir: 1 // Para cima
+	*/
+	if(dy > 0){
+		stage[actualStage-1].bgy += dy;
+		stage[actualStage].bgy += dy;		
+	}
+	else if(dy < 0){
+		stage[actualStage-2].bgy += dy;
+		stage[actualStage-1].bgy += dy;		
+	}
+	/*
 	for(int i = 0; i < 6; i++){
 		if(stage->colliders[i].y != -1){
 			stage->colliders[i].y += dy;
 		}
-	}/*
+	}
 	stage->leftLimit.y1 += dy;
 	stage->leftLimit.y2 += dy;
 	stage->rightLimit.y1 += dy;
@@ -76,5 +89,13 @@ TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimi
 		temp.colliders[i].y = -1;
 	}
 	temp.active = false;
+	temp.bgx = 0;
+	temp.bgy = 0;
 	return temp;
+}
+
+void drawStage(TStage stage){
+	if(stage.active){
+		putimage(stage.bgx, stage.bgy, stage.background, COPY_PUT);		
+	}
 }

@@ -21,6 +21,7 @@ TEntity dialogueBox1;
 TEntity background_1;
 TRect box, paredeEsq, paredeCima, paredeBaixo, paredeDir;
 TRect goLeft, goRight, goUp, goDown;
+TUi menu;
 
 	// Definindo os Estágios
 int actualStage = 1;
@@ -84,7 +85,7 @@ void setup(){
 		
 	//Carregar imagens
 	//bgTest = load_image("assets/map_test2.bmp", 1000, 5000);
-	background_1.sprite = load_image("assets/stage1.5.bmp", 1000, 800, 1);	
+	menu.bg.image = load_image("assets/menu.bmp", 1000, 800);
 	player.sprite = load_image("assets/vagalume.bmp", 256, 256, 0.5);
 	spriteSize = 128;
 	paje.sprite = load_image("assets/paje.bmp", 1024, 1024);
@@ -97,16 +98,47 @@ void setup(){
 	//player.mask = load_image("assets/player_m.bmp", 128, 128, 0.5);
 	
 	// CRIANDO OS ESTÁGIOS
+	/* PRIMEIRO ESTÁGIO */
 	stages[0] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
 						 Line(0, 250, xmax, 250),               //UpLimit
 						 Line(0, ymax, 650, ymax));             //DownLimit
 	stages[0].colliders[0] = Rect(420, 200, 60, 400);
+	stages[0].active = true;
+	stages[0].background = load_image("assets/stage1.5.bmp", 1000, 800, 1);
+	
+	/* SEGUNDO ESTÁGIO */
 	stages[1] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
 						 Line(0, 0, 650, 0),                    //UpLimit
 						 Line(0, ymax, 650, ymax));             //DownLimit
 	stages[1].colliders[0] = Rect(420, 200, 60, 400);
+	stages[1].background = load_image("assets/stage1.4.bmp", 1000, 800, 1);
+	stages[1].bgy = ymax;
+	/* TERCEIRO ESTÁGIO */
+	stages[2] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 0, 650, 0),                    //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
+	stages[2].colliders[0] = Rect(420, 200, 60, 400);
+	/* QUARTO ESTÁGIO */
+	stages[3] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 0, 650, 0),                    //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
+	stages[3].colliders[0] = Rect(420, 200, 60, 400);
+	/* QUINTO ESTÁGIO */
+	stages[4] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 0, 650, 0),                    //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
+	stages[4].colliders[0] = Rect(420, 200, 60, 400);
+	/* SEXTO ESTÁGIO */
+	stages[5] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+						 Line(0, 0, 650, 0),                    //UpLimit
+						 Line(0, ymax, 650, ymax));             //DownLimit
+	stages[5].colliders[0] = Rect(420, 200, 60, 400);
 	
 	//Criação de retângulos de colisão
 	paredeEsq = Rect(0, 0, 81, 750);
@@ -149,22 +181,23 @@ void setup(){
 		
 		inventory.itens[i] = itens[i];
 	}
+	
 	// Criar Botões no jogo
 	setfillstyle(1, RGB(140, 140, 140));	
-	bar(0, 0, 128, 64);
-	aux = Rect(xmax/2 - 64, ymax/2 - 35, 128, 64);
-	btnPlay.collider = aux;
-	btnPlay.sprite = print_area(128, 64);	
-	btnPlay.x = xmax/2 - 64;
-	btnPlay.y = ymax/2 - 35;	
+	bar(0, 0, 164, 64);
+	aux = Rect(xmax/2 - 64, ymax/2 - 35, 164, 64);
+	menu.btn[BTN_START].collider = aux;
+	menu.btn[BTN_START].sprite = print_area(164, 64);	
+	menu.btn[BTN_START].x = xmax/2 - 50 - 32;
+	menu.btn[BTN_START].y = ymax/2 - 30;	
 	
 	setfillstyle(1, RGB(200, 200, 200));	
 	bar(0, 0, 128, 64);
 	aux = Rect(xmax/2 - 64, ymax/2 + 35, 128, 64);
-	btnExit.collider = aux;
-	btnExit.sprite = print_area(128, 64);	
-	btnExit.x = xmax/2 - 64;
-	btnExit.y = ymax/2 + 35;
+	menu.btn[BTN_EXIT].collider = aux;
+	menu.btn[BTN_EXIT].sprite = print_area(128, 64);	
+	menu.btn[BTN_EXIT].x = xmax/2 - 64;
+	menu.btn[BTN_EXIT].y = ymax/2 + 45;
 	
 	// Balão de fala - TESTE	
 	setfillstyle(1, RGB(200, 200, 200));	
@@ -226,8 +259,8 @@ void menu_tick(){
 //		printf("(%d, %d) - ", mouse.x, mouse.y);
 //		printf("(%d, %d)\n", btnPlay.collider.x, btnPlay.collider.y);
 		window = GetForegroundWindow();
-		if (colliderMouseRect(mouse, btnPlay.collider)) gameloop = GAME;
-		if (colliderMouseRect(mouse, btnExit.collider)) gameloop = EXIT;
+		if (colliderMouseRect(mouse, menu.btn[BTN_START].collider)) gameloop = GAME;
+		if (colliderMouseRect(mouse, menu.btn[BTN_EXIT].collider)) gameloop = EXIT;
 	}
 }
 
@@ -235,9 +268,12 @@ void menu_render(){
 	if(pg == 1) pg = 2; else pg = 1;
 	setvisualpage(pg);				
 	cleardevice();
+	drawBG(menu.bg);
 	// JOGAR - SAIR
-	drawEntity(btnPlay, 1);
-	drawEntity(btnExit, 1);
+	//drawEntity(menu.btn[BTN_START], 1);
+//	drawEntity(menu.btn[BTN_EXIT], 1);
+	
+	
 	setactivepage(pg);
 }
 
@@ -292,7 +328,13 @@ void game_render(){
 
 	
 	//Desenhar Background
-	drawEntity(background_1, 1);
+	//drawEntity(background_1, 1);
+	drawStage(stages[0]);
+	drawStage(stages[1]);
+	drawStage(stages[2]);
+	drawStage(stages[3]);
+	drawStage(stages[4]);
+	drawStage(stages[5]);
 	
 	//Desenhar player	
 	drawEntity(player, 1);
@@ -343,35 +385,47 @@ void game_tick(){
 		if (lastStage < actualStage){
 			if(moveStageKey <= -ymax){
 				isInChange = false;
+				stages[lastStage-1].active = false;
 				moveStageKey = 0;
+			} else if (moveStageKey == 0){
+				player.y -= player.spd*2;
+				moveStageKey -= 5;
 			} else {
 				moveStageKey -= 5;
 			}
 			/* MOVIMENTAR OBJETOS PARA CIMA */
-			moveStage(&stages[actualStage-1], -5);
+			stages[lastStage-1].bgy += -5;
+			stages[actualStage-1].bgy += -5;
 			player.y += -5;
 		} else {
 			if(moveStageKey >= ymax){
 				isInChange = false;
+				stages[lastStage-1].active = false;	
 				moveStageKey = 0;
+			} else if (moveStageKey == 0){
+				player.y += player.spd*2;	
+				moveStageKey += 5;
 			} else {
 				moveStageKey += 5;
 			}
 			/* MOVIMENTAR OBJETOS PARA BAIXO */
-			moveStage(&stages[actualStage-1], 5);
+			stages[lastStage-1].bgy += 5;
+			stages[actualStage-1].bgy += 5;
 			player.y += 5;			
 		}
 		
 	} else{	
 		// Verificar caso o jogador tente passar de cenário
-		if(player.y + player.spd + player.size/2 >= ymax && !isInChange){
+		if(player.y + player.size/2 >= ymax + player.spd*2  && !isInChange){
 			isInChange = true;
 			lastStage = actualStage;
+			stages[actualStage].active = true;
 			moveStageKey = 0;
 			actualStage += 1;
-		} else if(player.y - player.spd <= -player.size && !isInChange){
+		} else if(player.y <= -player.size/2 - player.spd*2 && !isInChange){
 			isInChange = true;
 			lastStage = actualStage;
+			stages[actualStage-2].active = true;
 			moveStageKey = 0;
 			actualStage -= 1;
 		}
