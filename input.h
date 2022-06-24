@@ -5,6 +5,7 @@
 #define VK_A 65
 #define VK_S 83
 #define VK_D 68
+#define VK_E 45
 
 #define ESC 27
 #define SPACE 32

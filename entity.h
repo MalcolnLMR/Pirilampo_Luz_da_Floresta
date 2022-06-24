@@ -21,6 +21,7 @@ struct TEntity{
 	
 	// Verificação para desenhar na tela
 	bool show;
+	int stage;
 	
 	// Está se movimentando
 	bool isMoving;

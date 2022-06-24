@@ -92,7 +92,8 @@ void drawEntity(TEntity en, int style){
 			putimage(en.x, en.y, en.sprite, COPY_PUT);
 			break;
 		case 2:
-			putimage(en.x, en.y, en.mask, COPY_PUT);
+			putimage(en.x, en.y, en.mask, AND_PUT);
+			break;
 	}
 }
 

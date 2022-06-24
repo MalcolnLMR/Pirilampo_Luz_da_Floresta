@@ -15,6 +15,7 @@ TEntity player;                             // O Jogador
 TEntity paje, orbe, mora, espelho, lampiao; // Objetos de cenário
 TEntity taturana;                           // Inimigos
 
+
 // Outros (Botões e caixas de diálogo)
 TEntity btnPlay, btnExit;
 TEntity dialogueBox1;
@@ -26,6 +27,7 @@ TAnimation onScreenItens;
 unsigned char* onScreenSprite, *onScreenMask;
 int animationKey = 0;
 bool debugMode = false;
+bool colect = false;
 
 	// Definindo os Estágios
 int actualStage = 1;
@@ -100,23 +102,38 @@ void setup(){
 	
 	spriteSize = 64;
 	paje.sprite = load_image("assets/entidades/Paje.bmp", 256, 256, 0.5);
-	paje.sprite = load_image("assets/entidades/PajeMascara.bmp", 256, 256, 0.5);
+	paje.mask = load_image("assets/entidades/PajeMascara.bmp", 256, 256, 0.5);
+	paje.stage = 2;
+	paje.x = 350; paje.y = 35 + ymax;
 	/*
-	orbe.sprite = load_image("assets/entidades/paje.bmp", 256, 256, 0.5);
-	orbe.mask = load_image("assets/entidades/paje.bmp", 256, 256, 0.5);
-	*/
-	/*
-	mora.sprite = load_image("assets/entidades/paje.bmp", 256, 256, 0.5);
-	mora.sprite = load_image("assets/entidades/paje.bmp", 256, 256, 0.5);
+	orbe.sprite = load_image("assets/entidades/Orbe.bmp", 256, 256, 0.5);
+	orbe.mask = load_image("assets/entidades/MaraMascara.bmp", 256, 256, 0.5);	
+	orbe.stage = 3;
+	orbe.x = xmax/2; orbe.y = ymax/2 + ymax * 2;
+	
+	mora.sprite = load_image("assets/entidades/Mara.bmp", 256, 256);
+	mora.mask = load_image("assets/entidades/MaraMascara.bmp", 256, 256);
+	mora.stage = 4;
+	orbe.x = xmax/2; orbe.y = ymax/2 + ymax * 2;
 	*/
 	espelho.sprite = load_image("assets/entidades/espelho.bmp", 256, 256, 0.5);
-	espelho.sprite = load_image("assets/entidades/espelhoMascara.bmp", 256, 256, 0.5);
-	lampiao.sprite = load_image("assets/lampiao.bmp", 1024, 1024);
-	lampiao.sprite = load_image("assets/entidades/lampiao.bmp", 256, 256, 0.5);
-	lampiao.sprite = load_image("assets/entidades/lampiaoMascara.bmp", 256, 256, 0.5);
+	espelho.mask = load_image("assets/entidades/espelhoMascara.bmp", 256, 256, 0.5);
+	espelho.stage = 1;
+	espelho.show = true;
+	espelho.x = 300; espelho.y = 100;
 	
+	lampiao.sprite = load_image("assets/entidades/lampiao.bmp", 256, 256, 0.5);
+	lampiao.mask = load_image("assets/entidades/lampiaoMascara.bmp", 256, 256, 0.5);
+	lampiao.stage = 1;
+	lampiao.show = true;
+	lampiao.x = 250; lampiao.y = 300;
+	
+	/*
 	taturana.sprite = load_image("assets/entidades/Taturana0001.bmp", 256, 256, 0.5);
-	taturana.sprite = load_image("assets/entidades/TaturanaMascara0001.bmp", 256, 256, 0.5);
+	taturana.mask = load_image("assets/entidades/TaturanaMascara0001.bmp", 256, 256, 0.5);
+	taturana.stage = 3;
+	taturana.x = xmax/2; taturana.y = ymax/2 + 200 + ymax * 2;
+	*/
 	
 	//player.mask = load_image("assets/player_m.bmp", 128, 128, 0.5);
 	
@@ -147,42 +164,32 @@ void setup(){
 	stages[1].colliders[4] = Rect(240, ymax-60, 125, 60);
 	stages[1].colliders[5] = Rect(xmax-350, 0, 100, 500);
 	stages[1].background = load_image("assets/BG/Arvore2.bmp", 500, 400, 2);
-	stages[1].bgy = ymax + 1;
+	stages[1].bgy = ymax;
 	/* TERCEIRO ESTÁGIO */
-	stages[2] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
-	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
+	stages[2] = setStage(Line(250, 0, 250, ymax),               //LeftLimit
+	                     Line(xmax - 180, 0, xmax - 180, ymax), //RightLimit
 						 Line(0, 0, 650, 0),                    //UpLimit
-						 Line(0, ymax, 650, ymax));             //DownLimit
-	stages[2].colliders[0] = Rect(460, 10, 50, 280);
-	stages[2].colliders[1] = Rect(250, 420, 350, 30);
-	stages[2].colliders[2] = Rect(250, 450, 50, 400);
-	stages[2].colliders[3] = Rect(xmax-300, 620, 100, 500);
-	stages[2].colliders[4] = Rect(250, ymax-40, 250, 40);
+						 Line(0, ymax, 0, ymax));               //DownLimit
+	stages[2].colliders[0] = Rect(240, 0, 125, 60);
+	stages[2].colliders[1] = Rect(xmax-380, 0, 200, 60);
+	stages[2].colliders[2] = Rect(240, 425, 480, 35);
+	stages[2].colliders[3] = Rect(380, 600, 500, 35);
+	stages[2].colliders[4] = Rect(xmax/2-25, ymax/2-100, 100, 100);
+	stages[2].colliders[5] = Rect(250, 270, 30, 300);
 	stages[2].background = load_image("assets/BG/Arvore3.bmp", 500, 400, 2);
-	stages[2].bgy = ymax - 5;
+	stages[2].bgy = ymax - 6;
 	/* QUARTO ESTÁGIO */
-	stages[3] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
+	stages[3] = setStage(Line(200, 0, 200, ymax),               //LeftLimit
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
-						 Line(0, 0, 650, 0),                    //UpLimit
-						 Line(0, ymax, 650, ymax));             //DownLimit
-	stages[3].colliders[0] = Rect(460, 10, 50, 280);
-	stages[3].colliders[1] = Rect(250, 420, 350, 30);
-	stages[3].colliders[2] = Rect(250, 450, 50, 400);
-	stages[3].colliders[3] = Rect(xmax-300, 620, 100, 500);
-	stages[3].colliders[4] = Rect(250, ymax-40, 250, 40);
+						 Line(0, 0, 0, 0),                      //UpLimit
+						 Line(0, ymax, xmax, ymax));            //DownLimit
+	stages[3].colliders[0] = Rect(0, 0, 0, 0);
+	stages[3].colliders[1] = Rect(0, 0, 0, 0);
+	stages[3].colliders[2] = Rect(0, 0, 0, 0);
+	stages[3].colliders[3] = Rect(0, 0, 0, 0);
+	stages[3].colliders[4] = Rect(0, 0, 0, 0);
 	stages[3].background = load_image("assets/BG/Arvore4.bmp", 500, 400, 2);
-	stages[3].bgy = ymax - 10;
-	
-	//Criação de retângulos de colisão
-	paredeEsq = Rect(0, 0, 81, 750);
-	paredeCima = Rect(0, 0, 750, 60);
-	paredeBaixo = Rect(0, 680, 750, 70);
-	paredeDir = Rect(649, 0, 81, 750);
-	box = Rect(459, 221, 181, 42);	
-	goLeft = Rect(0, 0, 50, 800);	
-	goRight = Rect(950, 0, 50, 800);	
-	goUp = Rect(0, 0, 950, 50);	
-	goDown = Rect(0, 750, 1000, 50);	
+	stages[3].bgy = ymax - 11;
 	
 		//Para o jogador:
 	player.cup    = Rect(player.x, player.y - coffset, 64, 64);
@@ -199,45 +206,38 @@ void setup(){
 		// 	Definição dos itens
 
 	TRect aux;
-	for(i = 0; i <= itensLenght; i++){
+	for(i = 0; i < itensLenght; i++){
 		aux = Rect(200 + (i * 70), 686, 64, 64);
 		itens[i] = Item(i, "item", aux);
 		
 			// TEMPORÁRIO - CRIAR SPRITE
-//		setfillstyle(1, RGB(15, 140, 140));	
-//		bar(0, 0, 64, 64);
 		itens[i].sprite = 0;
 			// SELECTED
-		bar(0, 0, 64, 64);
-//		setfillstyle(1, RGB(140, 15, 140));	
-//		fillellipse(32, 32, 16, 16);
 		itens[i].spriteselected = 0;
 		
 		inventory.itens[i] = itens[i];
 	}
 	// Lasca 
-	inventory.itens[GLASS].sprite = load_image("assets/itens/lasca.bmp", 124, 124);	
-	//itens[0].spriteselected = load_image("assets/itens/lasca.bmp", 124, 124, 0.5);
-	//itens[0].spriteselected = 	itens[0].sprite;
-	// Espatula 
+	inventory.itens[GLASS].sprite = load_image("assets/itens/lasca.bmp", 124, 124, 0.5);
 	
+	// Espatula 	
 	inventory.itens[1].sprite = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
-	//itens[1].spriteselected = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
+	
 	// Orbe 
 	inventory.itens[2].sprite = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
-//	itens[2].spriteselected = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
+	
 	// Chave Descarregada 
-	inventory.itens[3].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
-//	itens[3].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+	inventory.itens[KEYOFF].sprite = load_image("assets/itens/chave1.bmp", 124, 124, 0.5);
+	
 	// Flor 
 	inventory.itens[4].sprite = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
-//	itens[4].spriteselected = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
+	
 	// Alma do pajé 
 	inventory.itens[5].sprite = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
-//	itens[5].spriteselected = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
+	
 	// Chave Carregada 
 	inventory.itens[6].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
-//	itens[6].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+	
 	
 	// Criar Botões no jogo
 	setfillstyle(1, RGB(140, 140, 140));	
@@ -274,23 +274,23 @@ void setup(){
 		item[i].mask = onScreenMask;
 	}
 	
-	aux = Rect(300, 300, 64, 64);
+	aux = Rect(290, 390, 64, 64);
 	item[GLASS].collider = aux;	
 	item[GLASS].x = 290;
-	item[GLASS].y = 400;
+	item[GLASS].y = 390;
 	item[GLASS].show = true;
 	
 	aux = Rect(600, 300, 64, 64);
 	item[ORB].collider = aux;
 	item[ORB].x = 600;
-	item[ORB].y = 300;
-	item[ORB].show = false;
+	item[ORB].y = 300 + ymax;
+	item[ORB].show = true;
 	
 	aux = Rect(500, 500, 64, 64);	
 	item[KEYOFF].collider = aux;
 	item[KEYOFF].x = 500;
-	item[KEYOFF].y = 500;
-	item[KEYOFF].show = false;	
+	item[KEYOFF].y = 500 + ymax * 2;
+	item[KEYOFF].show = true;	
 		
     mciSendString("seek BGM to start", NULL, 0, 0);
     mciSendString("play BGM repeat", NULL, 0, 0);
@@ -375,24 +375,28 @@ void game_render(){
 	drawStage(stages[2]);
 	drawStage(stages[3]);
 	
-	//Desenhar player	
+	if (paje.show) drawEntity(paje, 0);
+	//if (orbe.show) drawEntity(orbe, 0);
+	//if (mora.show) drawEntity(mora, 0);
+	if (espelho.show) drawEntity(espelho, 0);
+	if (lampiao.show) drawEntity(lampiao, 0);
+	//if (taturana.show) drawEntity(taturana, 0);
+	
+	//Desenhar player
 	drawEntity(player, 0);
 	
 	//Desenhar itens no inventário
-	for(i = 0; i <= inventory.lenght; i++){
-		if(inventory.itens[i].show)	{			
-//			if(inventory.itens[i].selected)
-//				putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].spriteselected, COPY_PUT);				
-//			else
+	for(i = 0; i < itensLenght; i++){
+		if(inventory.itens[i].show)	{
 			putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].sprite, COPY_PUT);				
 		}		
 	}	
+	
 	
 	for (i = 0; i < itensLenght; i++){
 			if(item[i].show)   putimage(item[i].x, item[i].y, item[i].sprite, AND_PUT);
 			if(item[i].show)   putimage(item[i].x, item[i].y, item[i].mask,  OR_PUT);
 	}
-	//putimage(500, 500, onScreenItens.frame1,  COPY_PUT);
 	
 	if (FPSCounter >= 30){
 		animationKey++;
@@ -431,24 +435,72 @@ void game_tick(){
 	//Manter o retângulo de colisão no jogador
 	syncEntityCollider(&player, coffset);
 	syncEntityCollider(&dialogueBox1);
-	syncEntityCollider(&item[0]);
-	syncEntityCollider(&item[2]);
-	syncEntityCollider(&item[3]);
+	syncEntityCollider(&item[GLASS]);
+	syncEntityCollider(&item[ORB]);
+	syncEntityCollider(&item[KEYOFF]);
 	
 	// Verificar se está em troca de estágio
 	if(isInChange){
 		if (lastStage < actualStage){
 			if(moveStageKey <= -ymax){
+				// FINALIZAR TRANSIÇÃO //
 				isInChange = false;
 				stages[lastStage-1].active = false;
 				moveStageKey = 0;
+				// DESLIGAR SPRITES //
+				if (actualStage == 1){
+					paje.show = false;
+					mora.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}
+				else if (actualStage == 2){
+					espelho.show = false;
+					lampiao.show = false;
+					mora.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}
+				else if (actualStage == 3){
+					lampiao.show = false;
+					paje.show = false;
+					mora.show = false;
+				}
+				else if (actualStage == 4){
+					espelho.show = false;
+					lampiao.show = false;
+					paje.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}				
+				
 			} else if (moveStageKey == 0){
-				player.y -= player.spd*2;
+				// AO COMEÇAR //
+				if (actualStage == 1){
+					espelho.show = true;
+					lampiao.show = true;
+				}
+				else if (actualStage == 2) paje.show = true;
+				else if (actualStage == 3){
+					orbe.show = true;
+					taturana.show = true;
+				}
+				else if (actualStage == 4) mora.show = true;
+				
+				player.y -= player.spd*2;				
 				moveStageKey -= 5;
 			} else {
 				moveStageKey -= 5;
 			}
 			/* MOVIMENTAR OBJETOS PARA CIMA */
+			for (i = 0; i < itensLenght; i++){
+				item[i].y += -5;
+			}
+			//orbe.y	+= -5;
+			//taturana.y += -5;
+			espelho.y += -5;
+			lampiao.y += -5;
+			paje.y += -5;
 			stages[lastStage-1].bgy += -5;
 			stages[actualStage-1].bgy += -5;
 			player.y += -5;
@@ -457,16 +509,62 @@ void game_tick(){
 				isInChange = false;
 				stages[lastStage-1].active = false;	
 				moveStageKey = 0;
+				// DESLIGAR SPRITES //
+				if (actualStage == 1){
+					paje.show = false;
+					mora.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}
+				else if (actualStage == 2){
+					espelho.show = false;
+					lampiao.show = false;
+					mora.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}
+				else if (actualStage == 3){
+					lampiao.show = false;
+					paje.show = false;
+					mora.show = false;
+				}
+				else if (actualStage == 4){
+					espelho.show = false;
+					lampiao.show = false;
+					paje.show = false;
+					orbe.show = false;
+					taturana.show = false;
+				}
 			} else if (moveStageKey == 0){
+				// AO COMEÇAR //
+				if (actualStage == 1){
+					espelho.show = true;
+					lampiao.show = true;
+				}
+				else if (actualStage == 2) paje.show = true;
+				else if (actualStage == 3){
+					orbe.show = true;
+					taturana.show = true;
+				}
+				else if (actualStage == 4) mora.show = true;
+				
 				player.y += player.spd*2;	
 				moveStageKey += 5;
 			} else {
 				moveStageKey += 5;
 			}
 			/* MOVIMENTAR OBJETOS PARA BAIXO */
+			for (i = 0; i < itensLenght; i++){
+				item[i].y += 5;
+			}
 			stages[lastStage-1].bgy += 5;
 			stages[actualStage-1].bgy += 5;
-			player.y += 5;			
+			player.y += 5;
+			//orbe.y	+= 5;
+			//taturana.y += 5;
+			espelho.y += 5;
+			lampiao.y += 5;
+			paje.y += 5;
 		}
 		
 	} else{	
@@ -511,29 +609,33 @@ void game_tick(){
 		}
 		if(GetKeyState(VK_END)&0x80){
 			debugMode = true;
+		}
+		if(GetKeyState(VK_E)&0x80){
+			colect = true;
 		}	
+		if(GetKeyState(VK_ESCAPE)&0x80){
+			gameloop = EXIT;
+		}
 	}
 	
 	//Adicionar item ao inventário
-	if (item[GLASS].show && colliderRectRect(player.collider, item[GLASS].collider)) {
-		addItem(&inventory.itens[0]);
+	if (item[GLASS].show && colliderRectRect(player.collider, item[GLASS].collider)) {		
+		addItem(&inventory.itens[GLASS]);
 		destroyEntity(&item[GLASS]);
+		colect = false;
 	}
-	if (key == 50) addItem(&inventory.itens[1]);
 	
 	if (item[ORB].show && colliderRectRect(player.collider, item[ORB].collider)) {
-		addItem(&inventory.itens[2]);
+		addItem(&inventory.itens[ORB]);
 		destroyEntity(&item[ORB]);
+		colect = false;
 	}
 	if (item[KEYOFF].show && colliderRectRect(player.collider, item[KEYOFF].collider)) {
-		addItem(&inventory.itens[3]);
+		addItem(&inventory.itens[ORB]);
 		destroyEntity(&item[KEYOFF]);
+		colect = false;
 	}
-	
-	if (key == 53) addItem(&inventory.itens[4]);
-	if (key == 54) addItem(&inventory.itens[5]);
-	
-	
+		
 	// Comandos com o Mouse
 	GetCursorPos(&mouse);
 	ScreenToClient(window, &mouse);
