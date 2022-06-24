@@ -76,10 +76,7 @@ void exit_tick();
 void setup(){
 	//Definir variaveis e criar tela
 	initwindow(1000, 800, "Guardioes da Floresta");
-	window = GetForegroundWindow();
-	xmax = getmaxx();
-	ymax = getmaxy();
-	setvisualpage(pg);	
+	setvisualpage(pg);
 	
 	/* 
 		Loadingscreen
@@ -88,7 +85,11 @@ void setup(){
 	setactivepage(pg);	
 	if(pg == 1) pg = 2; else pg = 1;
 	setvisualpage(pg);
+	window = GetForegroundWindow();
+	xmax = getmaxx();
+	ymax = getmaxy();
 		
+	mciSendString("open OST.mp3 type MPEGVideo alias BGM", NULL, 0,0);
 	//Carregar imagens
 	//bgTest = load_image("assets/map_test2.bmp", 1000, 5000);
 	menu.bg.image = load_image("assets/menu.bmp", 1000, 800);
@@ -135,15 +136,16 @@ void setup(){
 	stages[0].background = load_image("assets/BG/Arvore1.bmp", 500, 400, 2);
 	
 	/* SEGUNDO ESTÁGIO */
-	stages[1] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
-	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
-						 Line(0, 0, 650, 0),                    //UpLimit
-						 Line(0, ymax, 650, ymax));             //DownLimit
-	stages[1].colliders[0] = Rect(460, 10, 50, 280);
-	stages[1].colliders[1] = Rect(250, 420, 350, 30);
-	stages[1].colliders[2] = Rect(250, 450, 50, 400);
-	stages[1].colliders[3] = Rect(xmax-300, 620, 100, 500);
-	stages[1].colliders[4] = Rect(250, ymax-40, 250, 40);
+	stages[1] = setStage(Line(240, 0, 240, ymax),               //LeftLimit
+	                     Line(xmax - 260, 0, xmax - 260, ymax), //RightLimit
+						 Line(0, 0, 450, 0),                    //UpLimit
+						 Line(0, ymax, 0, ymax));               //DownLimit
+	stages[1].colliders[0] = Rect(240, 0, 250, 150);
+	stages[1].colliders[1] = Rect(xmax/2 - 30, 300, 300, 20);
+	stages[1].colliders[2] = Rect(240, 500, 150, 25);
+	stages[1].colliders[3] = Rect(xmax-350, ymax-60, 125, 60);
+	stages[1].colliders[4] = Rect(240, ymax-60, 125, 60);
+	stages[1].colliders[5] = Rect(xmax-350, 0, 100, 500);
 	stages[1].background = load_image("assets/BG/Arvore2.bmp", 500, 400, 2);
 	stages[1].bgy = ymax + 1;
 	/* TERCEIRO ESTÁGIO */
@@ -151,13 +153,25 @@ void setup(){
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
 						 Line(0, 0, 650, 0),                    //UpLimit
 						 Line(0, ymax, 650, ymax));             //DownLimit
-	stages[2].colliders[0] = Rect(420, 200, 60, 400);
+	stages[2].colliders[0] = Rect(460, 10, 50, 280);
+	stages[2].colliders[1] = Rect(250, 420, 350, 30);
+	stages[2].colliders[2] = Rect(250, 450, 50, 400);
+	stages[2].colliders[3] = Rect(xmax-300, 620, 100, 500);
+	stages[2].colliders[4] = Rect(250, ymax-40, 250, 40);
+	stages[2].background = load_image("assets/BG/Arvore3.bmp", 500, 400, 2);
+	stages[2].bgy = ymax - 5;
 	/* QUARTO ESTÁGIO */
 	stages[3] = setStage(Line(100, 0, 100, ymax),               //LeftLimit
 	                     Line(xmax - 130, 0, xmax - 130, ymax), //RightLimit
 						 Line(0, 0, 650, 0),                    //UpLimit
 						 Line(0, ymax, 650, ymax));             //DownLimit
-	stages[3].colliders[0] = Rect(420, 200, 60, 400);
+	stages[3].colliders[0] = Rect(460, 10, 50, 280);
+	stages[3].colliders[1] = Rect(250, 420, 350, 30);
+	stages[3].colliders[2] = Rect(250, 450, 50, 400);
+	stages[3].colliders[3] = Rect(xmax-300, 620, 100, 500);
+	stages[3].colliders[4] = Rect(250, ymax-40, 250, 40);
+	stages[3].background = load_image("assets/BG/Arvore4.bmp", 500, 400, 2);
+	stages[3].bgy = ymax - 10;
 	
 	//Criação de retângulos de colisão
 	paredeEsq = Rect(0, 0, 81, 750);
@@ -190,38 +204,40 @@ void setup(){
 		itens[i] = Item(i, "item", aux);
 		
 			// TEMPORÁRIO - CRIAR SPRITE
-		setfillstyle(1, RGB(15, 140, 140));	
-		bar(0, 0, 64, 64);
-		itens[i].sprite = print_area(64, 64);
+//		setfillstyle(1, RGB(15, 140, 140));	
+//		bar(0, 0, 64, 64);
+		itens[i].sprite = 0;
 			// SELECTED
 		bar(0, 0, 64, 64);
-		setfillstyle(1, RGB(140, 15, 140));	
-		fillellipse(32, 32, 16, 16);
-		itens[i].spriteselected = print_area(64, 64);
+//		setfillstyle(1, RGB(140, 15, 140));	
+//		fillellipse(32, 32, 16, 16);
+		itens[i].spriteselected = 0;
 		
 		inventory.itens[i] = itens[i];
 	}
 	// Lasca 
-	itens[0].sprite = load_image("assets/itens/lasca.bmp", 124, 124, 0.5);
-	itens[0].spriteselected = load_image("assets/itens/lasca.bmp", 124, 124, 0.5);
+	inventory.itens[GLASS].sprite = load_image("assets/itens/lasca.bmp", 124, 124);	
+	//itens[0].spriteselected = load_image("assets/itens/lasca.bmp", 124, 124, 0.5);
+	//itens[0].spriteselected = 	itens[0].sprite;
 	// Espatula 
-	itens[1].sprite = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
-	itens[1].spriteselected = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
+	
+	inventory.itens[1].sprite = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
+	//itens[1].spriteselected = load_image("assets/itens/espatula.bmp", 124, 124, 0.5);
 	// Orbe 
-	itens[2].sprite = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
-	itens[2].spriteselected = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
+	inventory.itens[2].sprite = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
+//	itens[2].spriteselected = load_image("assets/itens/orbe.bmp", 124, 124, 0.5);
 	// Chave Descarregada 
-	itens[3].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
-	itens[3].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+	inventory.itens[3].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+//	itens[3].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
 	// Flor 
-	itens[4].sprite = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
-	itens[4].spriteselected = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
+	inventory.itens[4].sprite = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
+//	itens[4].spriteselected = load_image("assets/itens/flor.bmp", 124, 124, 0.5);
 	// Alma do pajé 
-	itens[5].sprite = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
-	itens[5].spriteselected = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
+	inventory.itens[5].sprite = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
+//	itens[5].spriteselected = load_image("assets/itens/paje.bmp", 124, 124, 0.5);
 	// Chave Carregada 
-	itens[6].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
-	itens[6].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+	inventory.itens[6].sprite = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
+//	itens[6].spriteselected = load_image("assets/itens/chave.bmp", 124, 124, 0.5);
 	
 	// Criar Botões no jogo
 	setfillstyle(1, RGB(140, 140, 140));	
@@ -251,8 +267,8 @@ void setup(){
 	dialogueBox1.show = false;
 	
 	// ITEM NA TELA
-	onScreenSprite = load_image("assets/entidades/item.bmp", 256, 256, 0.2);
-	onScreenMask   = load_image("assets/entidades/item_Mask.bmp", 256, 256, 0.2);
+	onScreenMask   = load_image("assets/entidades/anim_3.bmp", 600, 600, 0.1);
+	onScreenSprite = load_image("assets/entidades/anim_3_Mask.bmp", 600, 600, 0.1);
 	for (i = 0; i < itensLenght; i++){
 		item[i].sprite = onScreenSprite;
 		item[i].mask = onScreenMask;
@@ -274,8 +290,10 @@ void setup(){
 	item[KEYOFF].collider = aux;
 	item[KEYOFF].x = 500;
 	item[KEYOFF].y = 500;
-	item[KEYOFF].show = false;
-	
+	item[KEYOFF].show = false;	
+		
+    mciSendString("seek BGM to start", NULL, 0, 0);
+    mciSendString("play BGM repeat", NULL, 0, 0);
 	cleardevice();
 }
 
@@ -283,13 +301,9 @@ void setup(){
 
 void menu_tick(){
 	// JOGAR - SAIR
-	//window = SetActiveWindow(window);
 	GetCursorPos(&mouse);
 	ScreenToClient(window, &mouse);
-	//ClientToScreen(window, &mouse);
 	if (GetKeyState(VK_LBUTTON)&0x80) {	
-//		printf("(%d, %d) - ", mouse.x, mouse.y);
-//		printf("(%d, %d)\n", btnPlay.collider.x, btnPlay.collider.y);
 		window = GetForegroundWindow();
 		if (colliderMouseRect(mouse, menu.btn[BTN_START].collider)) gameloop = GAME;
 		if (colliderMouseRect(mouse, menu.btn[BTN_EXIT].collider)) gameloop = EXIT;
@@ -301,9 +315,6 @@ void menu_render(){
 	setvisualpage(pg);				
 	cleardevice();
 	drawBG(menu.bg);
-	// JOGAR - SAIR
-	//drawEntity(menu.btn[BTN_START], 1);
-//	drawEntity(menu.btn[BTN_EXIT], 1);
 	
 	
 	setactivepage(pg);
@@ -357,8 +368,6 @@ void game_render(){
 	setvisualpage(pg);				
 	cleardevice();
 	
-
-	
 	//Desenhar Background
 	//drawEntity(background_1, 1);
 	drawStage(stages[0]);
@@ -372,11 +381,10 @@ void game_render(){
 	//Desenhar itens no inventário
 	for(i = 0; i <= inventory.lenght; i++){
 		if(inventory.itens[i].show)	{			
-			if(inventory.itens[i].selected)
-				putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].spriteselected, COPY_PUT);				
-			else
-				putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].sprite, COPY_PUT);
-				
+//			if(inventory.itens[i].selected)
+//				putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].spriteselected, COPY_PUT);				
+//			else
+			putimage(inventory.itens[i].rect.x, inventory.itens[i].rect.y, inventory.itens[i].sprite, COPY_PUT);				
 		}		
 	}	
 	
@@ -411,6 +419,7 @@ void game_render(){
 		if (stages[actualStage-1].colliders[2].x != -1) drawRect(stages[actualStage-1].colliders[2]);
 		if (stages[actualStage-1].colliders[3].x != -1) drawRect(stages[actualStage-1].colliders[3]);
 		if (stages[actualStage-1].colliders[4].x != -1) drawRect(stages[actualStage-1].colliders[4]);
+		if (stages[actualStage-1].colliders[5].x != -1) drawRect(stages[actualStage-1].colliders[5]);
 		drawRect(player.collider);
 		/* FIM DO DEBUG DE COLLIDERS */			
 	}
@@ -497,8 +506,11 @@ void game_tick(){
 			player.x += player.spd;
 			player.isMoving = true;	
 		}
-		if(GetKeyState(VK_INSERT)&0x80){
-			debugMode = !debugMode;
+		if(GetKeyState(VK_HOME)&0x80){
+			debugMode = false;
+		}
+		if(GetKeyState(VK_END)&0x80){
+			debugMode = true;
 		}	
 	}
 	

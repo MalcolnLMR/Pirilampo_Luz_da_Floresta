@@ -25,7 +25,7 @@ struct TStage{
 	TLine upLimit;
 	TLine downLimit;
 	/* LISTA DE COLISÕES */
-	TRect colliders[5];
+	TRect colliders[6];
 	/* BACKGROUND */ 
 	int bgx, bgy; // Coordenadas do Background
 	unsigned char *background;
