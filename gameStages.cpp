@@ -4,42 +4,87 @@ void runStageCollider(int stage, TEntity* player, TStage stages[]){
 	switch (stage){
 		// Lista de Colisões do estágio 1
 		case 1:
-			// Colisões da ESQUERDA
-			
-			if(colliderEntityLine(player, stages[0].leftLimit, 1)) player->left	= false; // Parede						
-			else if(colliderEntityRect(player, stages[0].colliders[0], 1)) player->left = false;	
+			// Colisões da ESQUERDA			
+			if(colliderEntityLine(player, stages[stage-1].leftLimit, 1)) player->left	= false; // Parede						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 1)) player->left = false;						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 1)) player->left = false;						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[2], 1)) player->left = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 1)) player->left = false;							
+			else if(colliderEntityRect(player, stages[stage-1].colliders[4], 1)) player->left = false;	
 						
 			else player->left = true;
 			
-			// Colisões da DIREITA
-			
-			if(colliderEntityLine(player, stages[0].rightLimit, 2)) player->right = false;				
-			else if(colliderEntityRect(player, stages[0].colliders[0], 2)) player->right = false;
+			// Colisões da DIREITA			
+			if(colliderEntityLine(player, stages[stage-1].rightLimit, 2)) player->right = false;				
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 2)) player->right = false;	
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[1], 2)) player->right = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 2)) player->right = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[3], 2)) player->right = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[4], 2)) player->right = false;
 						
 			else player->right = true;
 			
 			// Colisões de CIMA
-			if(colliderEntityLine(player, stages[0].upLimit, 3)) player->up	= false;				
-			else if(colliderEntityRect(player, stages[0].colliders[0], 3)) player->up = false;
-						
+			if(colliderEntityLine(player, stages[stage-1].upLimit, 3)) player->up	= false;				
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 3)) player->up = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 3)) player->up = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 3)) player->up = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 3)) player->up = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 3)) player->up = false;
+			
 			else player->up = true;
 			
 			// Colisões de BAIXO
-			if(colliderEntityLine(player, stages[0].downLimit, 4)) player->down	= false;				
-			//else if(colliderRectRect(player->collider, stages[0].colliders[0], 4)) player->down = false;	
+			if(colliderEntityLine(player, stages[stage-1].downLimit, 4)) player->down	= false;				
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[0], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 4)) player->down = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[3], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[4], 4)) player->down = false;
 					
-			else player->down = true;
-			
+			else player->down = true;			
 			break;
 		case 2:
-			// Colisões da ESQUERDA
 			
-			// Colisões da DIREITA
+			// Colisões da ESQUERDA			
+			if(colliderEntityLine(player, stages[stage-1].leftLimit, 1)) player->left	= false; // Parede						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 1)) player->left = false;						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 1)) player->left = false;						
+			else if(colliderEntityRect(player, stages[stage-1].colliders[2], 1)) player->left = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 1)) player->left = false;							
+			else if(colliderEntityRect(player, stages[stage-1].colliders[4], 1)) player->left = false;	
+						
+			else player->left = true;
+			
+			// Colisões da DIREITA			
+			if(colliderEntityLine(player, stages[stage-1].rightLimit, 2)) player->right = false;				
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 2)) player->right = false;	
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[1], 2)) player->right = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 2)) player->right = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[3], 2)) player->right = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[4], 2)) player->right = false;
+						
+			else player->right = true;
 			
 			// Colisões de CIMA
+			if(colliderEntityLine(player, stages[stage-1].upLimit, 3)) player->up	= false;				
+			else if(colliderEntityRect(player, stages[stage-1].colliders[0], 3)) player->up = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 3)) player->up = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 3)) player->up = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 3)) player->up = false;						
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[3], 3)) player->up = false;
 			
-			// Colisões de BAIXO		
+			else player->up = true;
 			
+			// Colisões de BAIXO
+			if(colliderEntityLine(player, stages[stage-1].downLimit, 4)) player->down	= false;				
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[0], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[1], 4)) player->down = false;
+			//else if(colliderEntityRect(player, stages[stage-1].colliders[2], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[3], 4)) player->down = false;
+			else if(colliderEntityRect(player, stages[stage-1].colliders[4], 4)) player->down = false;
+					
+			else player->down = true;
 			break;
 		case 3:
 			
@@ -83,7 +128,7 @@ TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimi
 	temp.rightLimit = rightLimit;
 	temp.upLimit = upLimit;
 	temp.downLimit = downLimit;
-	for(int i = 0; i < 6; i++){
+	for(int i = 0; i < 5; i++){
 		temp.colliders[i].x = -1;
 		temp.colliders[i].y = -1;
 	}

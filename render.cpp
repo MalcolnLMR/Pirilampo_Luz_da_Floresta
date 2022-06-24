@@ -21,10 +21,32 @@ unsigned char * load_image(const char *locale, int width, int height, double sca
 	}
 }
 
+void *load_image_void(const char *locale, int width, int height, double scale, int ini_width, int ini_heigth){
+	//Pegar imagens
+	if(scale <= 1){
+		void *image;
+		int aux = imagesize(ini_width, ini_heigth, width-1, height-1);
+		image = malloc(aux);
+		readimagefile(locale, ini_width*scale, ini_heigth*scale, (width-1)*scale, (height-1)*scale);
+		getimage(ini_width*scale, ini_heigth*scale, (width-1)*scale, (height-1)*scale, image);
+		cleardevice();
+		return image;
+	} else {
+		void *image;
+		int aux = imagesize(ini_width, ini_heigth, (width-1)*scale, (height-1)*scale);
+		image = malloc(aux);
+		readimagefile(locale, ini_width, ini_heigth, (width-1)*scale, (height-1)*scale);
+		getimage(ini_width, ini_heigth, (width-1)*scale, (height-1)*scale, image);
+		cleardevice();
+		return image;		
+	}
+}
+
 unsigned char* do_mask(unsigned char *image, int size){
 	unsigned char B, G, R;
 	int aux = imagesize(0, 0, size-1, size-1);
 	unsigned char *mask;
+	mask = (unsigned char*)malloc(aux);
 	
 	B = image[24];
 	G = image[25];
@@ -69,6 +91,8 @@ void drawEntity(TEntity en, int style){
 		case 1:
 			putimage(en.x, en.y, en.sprite, COPY_PUT);
 			break;
+		case 2:
+			putimage(en.x, en.y, en.mask, COPY_PUT);
 	}
 }
 
@@ -84,6 +108,25 @@ void  drawRect(TRect rect){
 
 void  drawBG(TBackground bg){
 	putimage(bg.x, bg.y, bg.image, COPY_PUT);	
+}
+
+TAnimation Animation(int qtd, unsigned char *frame1, unsigned char *frame2, unsigned char *frame3, unsigned char *frame4, unsigned char *frame5){
+	TAnimation temp;
+	/*
+	for (int i = 0; i < qtd; i++){
+		if (i == 0)temp.frames1 = frame1;
+		else if (i == 1)temp.frames2 = frame2;
+		else if (i == 2)temp.frames3 = frame3;
+		else if (i == 3)temp.frames4 = frame4;
+		else if (i == 4)temp.frames5 = frame5;
+	}
+	*/
+	temp.frame1 = frame1;
+	temp.frame2 = frame2;
+	temp.frame3 = frame3;
+	temp.frame4 = frame4;
+	temp.frame5 = frame5;
+	return temp;
 }
 
 
