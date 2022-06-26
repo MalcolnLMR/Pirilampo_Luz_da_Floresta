@@ -12,7 +12,7 @@ struct TEntity{
 	int hp, spd;                 // Vida e Velocidade de movimento
 	
 	// Sprite e máscara
-	void *sprite, *mask;
+	unsigned char *sprite, *mask;
 	int size;
 	
 	// Retângulos de colisão
@@ -21,6 +21,7 @@ struct TEntity{
 	
 	// Verificação para desenhar na tela
 	bool show;
+	int stage;
 	
 	// Está se movimentando
 	bool isMoving;

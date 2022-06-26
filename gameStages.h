@@ -9,6 +9,15 @@
 #define PAUSE 5
 #define EXIT 6
 
+/* GAME OBJ */
+#define GLASS 0
+#define SPATULA 1
+#define ORB 2
+#define KEYOFF 3
+#define FLOWER 4
+#define PAJE 5
+#define KEYON 6
+
 struct TStage{
 	/* PAREDES LIMITADORAS */
 	TLine leftLimit;
@@ -16,10 +25,10 @@ struct TStage{
 	TLine upLimit;
 	TLine downLimit;
 	/* LISTA DE COLISÕES */
-	TRect colliders[5];
+	TRect colliders[6];
 	/* BACKGROUND */ 
 	int bgx, bgy; // Coordenadas do Background
-	void *background;
+	unsigned char *background;
 	bool active;
 };
 
@@ -29,7 +38,7 @@ struct TPlataform{
 };
 
 
-void runStageCollider(int stage, TEntity* player, TStage stages[6]);
+void runStageCollider(int stage, TEntity* player, TStage stages[4]);
 void changeStage(int endStage);
 TStage setStage(TLine leftLimit, TLine rightLimit, TLine upLimit, TLine downLimit);
 void moveStage(TStage *stage, int actualStage, int dy);

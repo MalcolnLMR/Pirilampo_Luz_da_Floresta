@@ -47,7 +47,8 @@ bool colliderRectRect(TRect obj1, TRect obj2, int orientation){
 }
 
 bool colliderEntityRect(TEntity* en, TRect rect, int orientation){
-	int rectx2 = rect.x + rect.width, recty2 = rect.y + rect.height;
+	int rectx2 = rect.x + rect.width;
+	int recty2 = rect.y + rect.height;
 	switch (orientation){
 		case 1: // ESQUERDA
 			if ((en->x - en->spd <= rectx2 && en->x >= rect.x) && (en->y + en->size >= rect.y && en->y <= recty2)) return true;
@@ -58,11 +59,11 @@ bool colliderEntityRect(TEntity* en, TRect rect, int orientation){
 			else return false;
 			break;
 		case 3: // CIMA
-			if ((en->y - en->spd <= recty2 && en->y >= rect.y) && (en->x + en->size >= rect.x && en->x <= rectx2)) return true;	
+			if ((en->y - en->spd <= recty2 && en->y >= recty2) && (en->x + en->size >= rect.x && en->x <= rectx2)) return true;	
 			else return false;
 			break;
 		case 4: // BAIXO
-			if ((en->y + en->spd >= rect.y && en->y <= recty2) && (en->x + en->size >= rect.x && en->x <= rectx2)) return true;	
+			if ((en->y + en->spd + en->size >= rect.y && en->y <= recty2) && (en->x + en->size >= rect.x && en->x <= rectx2)) return true;	
 			else return false;			
 			break;
 		default:
@@ -74,11 +75,11 @@ bool colliderEntityLine(TEntity* en, TLine line, int orientation){
 	
 	switch (orientation){
 		case 1: // ESQUERDA
-			if ((en->x - en->spd <= line.x1) && ((en->y - en->size >= line.y1) && (en->y <= line.y2))) return true;
+			if ((en->x - en->spd <= line.x1) && ((en->y >= line.y1) && (en->y <= line.y2))) return true;
 			else return false;			
 			break;
 		case 2:	// DIREITA		
-			if ((en->x + en->spd + en->size >= line.x1) && ((en->y - en->size >= line.y1) && (en->y <= line.y2))) return true;
+			if ((en->x + en->spd + en->size >= line.x1) && ((en->y >= line.y1) && (en->y <= line.y2))) return true;
 			else return false;
 			break;
 		case 3: // CIMA
